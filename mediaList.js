@@ -1,41 +1,52 @@
 var MEDIA_SOURCE_ROOT = location.protocol + '//' + location.host + location.pathname + 'channel/';
+// var MEDIA_SOURCE_ROOT = location.protocol + '//' + location.host + '/channel/';
 
 var mediaJSON = {
     'categories': [{
         'name': 'Movies',
-        'videos': [
-            {
-                'description': 'Tokyo 1 Desc',
-                'sources': MEDIA_SOURCE_ROOT + '/tokyo/video1.mp4',
-                'subtitle': 'Video 1 From Tokyo Subtitle',
-                'thumb': MEDIA_SOURCE_ROOT +'/tokyo/video1.png',
-                'title': 'Tokyo Video 1 Title',
-                'type': 'video/mp4'
-            },
-            {
-                'description': 'Tokyo 2 Desc',
-                'sources': MEDIA_SOURCE_ROOT + '/tokyo/video2.mp4',
-                'subtitle': 'Video 2 From Tokyo Subtitle',
-                'thumb': MEDIA_SOURCE_ROOT + '/tokyo/video2.png',
-                'title': 'Tokyo Video 2 Title',
-                'type': 'video/mp4'
-            },
-            {
-                'description': 'Frozen 2 Stream Desc',
-                'sources': MEDIA_SOURCE_ROOT + 'frozen2/index.m3u8',
-                'subtitle': 'Frozen 2 Stream Subtitle',
-                'thumb': MEDIA_SOURCE_ROOT +'/frozen2/thumb.png',
-                'title': 'Frozen 2 Stream Title',
-                'type': 'application/vnd.apple.mpegURL'
-            },
-            {
-                'description': 'Frozen 2 Video Desc' ,
+        'videos': [{
+                'description': 'Frozen 2',
                 'sources': MEDIA_SOURCE_ROOT + 'frozen2/frozen2.mp4',
-                'subtitle': 'Frozen 2 Video Subtitle',
-                'thumb': MEDIA_SOURCE_ROOT +'/frozen2/thumb.png',
-                'title': 'Frozen 2 Video Title',
+                'subtitle': 'Frozen 2',
+                'thumb': MEDIA_SOURCE_ROOT + '/frozen2/thumb.png',
+                'title': 'Frozen 2',
                 'type': 'video/mp4'
-            }
+            },{
+                'description': 'Aladdin',
+                'sources': MEDIA_SOURCE_ROOT + 'aladdin/aladdin.mp4',
+                'subtitle': 'Aladdin',
+                'thumb': MEDIA_SOURCE_ROOT + '/aladdin/thumb.png',
+                'title': 'Aladdin',
+                'type': 'video/mp4'
+            },{
+                'description': 'Toy Story 1',
+                'sources': MEDIA_SOURCE_ROOT + 'toyStory1/toyStory1.mp4',
+                'subtitle': 'Toy Story 1',
+                'thumb': MEDIA_SOURCE_ROOT + '/toyStory1/toyStory1.jpg',
+                'title': 'Toy Story 1',
+                'type': 'video/mp4'
+            },{
+                'description': 'Toy Story 2',
+                'sources': MEDIA_SOURCE_ROOT + 'toyStory2/toyStory2.mp4',
+                'subtitle': 'Toy Story 2',
+                'thumb': MEDIA_SOURCE_ROOT + '/toyStory2/toyStory2.jpg',
+                'title': 'Toy Story 2',
+                'type': 'video/mp4'
+            },{
+                'description': 'Toy Story 3',
+                'sources': MEDIA_SOURCE_ROOT + 'toyStory3/toyStory3.mp4',
+                'subtitle': 'Toy Story 3',
+                'thumb': MEDIA_SOURCE_ROOT + '/toyStory3/toyStory3.jpg',
+                'title': 'Toy Story 3',
+                'type': 'video/mp4'
+            },{
+                'description': 'Toy Story 4',
+                'sources': MEDIA_SOURCE_ROOT + 'toyStory4/toyStory4.mp4',
+                'subtitle': 'Toy Story 4',
+                'thumb': MEDIA_SOURCE_ROOT + '/toyStory4/toyStory4.jpg',
+                'title': 'Toy Story 4',
+                'type': 'video/mp4'
+            },
         ]
     }]
 };

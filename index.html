@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>My Hailey Super 2.0</title>
+  <link rel="stylesheet" type="text/css" href="css/netflix.css">
   <link rel="stylesheet" type="text/css" href="css/CastVideos.css">
   <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet'
     type='text/css'>
@@ -9,13 +10,8 @@
 </head>
 
 <body>
-  <!-- <div id="top_header">
-    <div id="logo"></div>
-  </div> -->
-
   <div id="main_video">
     <div class="imageSub">
-      <!-- Put Your Image Width -->
       <div class="blackbg" id="playerstatebg">IDLE</div>
       <div class=label id="playerstate">IDLE</div>
       <img src="imagefiles/background.png" id="video_image">
@@ -42,32 +38,30 @@
       <div id="duration">00:00:00</div>
     </div>
   </div>
-  <div id="media_info" style="display:none">
+  <!-- <div id="media_info" style="display:none">
     <div id="media_title">
     </div>
     <div id="media_subtitle">
     </div>
     <div id="media_desc">
     </div>
+  </div> -->
+
+<br/><br/>
+  <!-- <div id="carousel"></div> -->
+  <div class="contain">
+    <div class="row">
+      <div class="row__inner" id="carousel">
+      </div>
+    </div>
   </div>
 
-  <div id="carousel"></div>
-
-  <!-- 
-      <div id="footer">
-        <div id="copyright">Copyright 2019 Google LLC. All Rights reserved</div>
-        <div id="footer_content">Visit the <a id="footer_content_link" href="https://developers.google.com/cast/">Google Cast Developer Site</a></div>
-        <div id="footer_language">Language English</div>
-      </div> 
-  -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="mediaList.js"></script>
   <script src="CastVideos.js"></script>
   <script type="text/javascript">
     var castPlayer = new CastPlayer();
     window['__onGCastApiAvailable'] = function (isAvailable) {
-
-      // console.log(isAvailable);
       if (isAvailable) {
         castPlayer.initializeCastPlayer();
       }

@@ -203,12 +203,12 @@ var PlayerHandler = function (castPlayer) {
     this.load = function (mediaIndex) {
         castPlayer.playerState = PLAYER_STATE.LOADING;
 
-        document.getElementById('media_title').innerHTML =
-            castPlayer.mediaContents[castPlayer.currentMediaIndex]['title'];
-        document.getElementById('media_subtitle').innerHTML =
-            castPlayer.mediaContents[castPlayer.currentMediaIndex]['subtitle'];
-        document.getElementById('media_desc').innerHTML =
-            castPlayer.mediaContents[castPlayer.currentMediaIndex]['description'];
+        // document.getElementById('media_title').innerHTML =
+        //     castPlayer.mediaContents[castPlayer.currentMediaIndex]['title'];
+        // document.getElementById('media_subtitle').innerHTML =
+        //     castPlayer.mediaContents[castPlayer.currentMediaIndex]['subtitle'];
+        // document.getElementById('media_desc').innerHTML =
+        //     castPlayer.mediaContents[castPlayer.currentMediaIndex]['description'];
 
         this.target.load(mediaIndex);
         this.updateDisplayMessage();
@@ -819,14 +819,14 @@ CastPlayer.prototype.resetVolumeSlider = function () {
  * Initialize UI components and add event listeners
  */
 CastPlayer.prototype.initializeUI = function () {
-    debugger
-    // Set initial values for title, subtitle, and description
-    document.getElementById('media_title').innerHTML =
-        this.mediaContents[this.currentMediaIndex]['title'];
-    document.getElementById('media_subtitle').innerHTML =
-        this.mediaContents[this.currentMediaIndex]['subtitle'];
-    document.getElementById('media_desc').innerHTML =
-        this.mediaContents[this.currentMediaIndex]['description'];
+    
+    // // Set initial values for title, subtitle, and description
+    // document.getElementById('media_title').innerHTML =
+    //     this.mediaContents[this.currentMediaIndex]['title'];
+    // document.getElementById('media_subtitle').innerHTML =
+    //     this.mediaContents[this.currentMediaIndex]['subtitle'];
+    // document.getElementById('media_desc').innerHTML =
+    //     this.mediaContents[this.currentMediaIndex]['description'];
 
     // Add event handlers to UI components
     document.getElementById('progress_bg').addEventListener(
@@ -887,17 +887,27 @@ CastPlayer.prototype.initializeUI = function () {
 CastPlayer.prototype.addVideoThumbs = function () {
     this.mediaContents = mediaJSON['categories'][0]['videos'];
     var ni = document.getElementById('carousel');
-    var newdiv = null;
-    var divIdName = null;
+    // var newdiv = null;
+    // var divIdName = null;
+    // for (var i = 0; i < this.mediaContents.length; i++) {
+    //     newdiv = document.createElement('div');
+    //     divIdName = 'thumb' + i + 'Div';
+    //     newdiv.setAttribute('id', divIdName);
+    //     newdiv.setAttribute('class', 'thumb');
+    //     newdiv.innerHTML =
+    //         '<img src="' + this.mediaContents[i]['thumb'] + '" class="thumbnail">';
+    //     newdiv.addEventListener('click', this.selectMedia.bind(this, i));
+    //     ni.appendChild(newdiv);
+    // }
     for (var i = 0; i < this.mediaContents.length; i++) {
-        newdiv = document.createElement('div');
-        divIdName = 'thumb' + i + 'Div';
-        newdiv.setAttribute('id', divIdName);
-        newdiv.setAttribute('class', 'thumb');
-        newdiv.innerHTML =
-            '<img src="' + this.mediaContents[i]['thumb'] + '" class="thumbnail">';
-        newdiv.addEventListener('click', this.selectMedia.bind(this, i));
-        ni.appendChild(newdiv);
+        let tileDiv = document.createElement('div');
+        tileDiv.setAttribute('class', 'tile');
+        let mediaDiv = document.createElement('div');
+        mediaDiv.setAttribute('class', 'tile__media');   
+        mediaDiv.innerHTML = `<img src='${this.mediaContents[i]['thumb']}' class="tile__img">`;
+        mediaDiv.addEventListener('click', this.selectMedia.bind(this, i));
+        tileDiv.appendChild(mediaDiv);
+        ni.appendChild(tileDiv);
     }
 };
 
