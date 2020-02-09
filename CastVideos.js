@@ -202,14 +202,6 @@ var PlayerHandler = function (castPlayer) {
 
     this.load = function (mediaIndex) {
         castPlayer.playerState = PLAYER_STATE.LOADING;
-
-        // document.getElementById('media_title').innerHTML =
-        //     castPlayer.mediaContents[castPlayer.currentMediaIndex]['title'];
-        // document.getElementById('media_subtitle').innerHTML =
-        //     castPlayer.mediaContents[castPlayer.currentMediaIndex]['subtitle'];
-        // document.getElementById('media_desc').innerHTML =
-        //     castPlayer.mediaContents[castPlayer.currentMediaIndex]['description'];
-
         this.target.load(mediaIndex);
         this.updateDisplayMessage();
     };
@@ -424,10 +416,6 @@ CastPlayer.prototype.setupRemotePlayer = function () {
     }.bind(this);
 
     playerTarget.load = function (mediaIndex) {
-
-        console.log(`Title : ${this.mediaContents[mediaIndex]['title']}`);
-        console.log(`Load  : ${this.mediaContents[mediaIndex]['sources']}`);
-        console.log(`Type  : ${this.mediaContents[mediaIndex]['type']}`);
         var mediaInfo = new chrome.cast.media.MediaInfo(
             this.mediaContents[mediaIndex]['sources'], this.mediaContents[mediaIndex]['type']);
 
@@ -819,15 +807,6 @@ CastPlayer.prototype.resetVolumeSlider = function () {
  * Initialize UI components and add event listeners
  */
 CastPlayer.prototype.initializeUI = function () {
-    
-    // // Set initial values for title, subtitle, and description
-    // document.getElementById('media_title').innerHTML =
-    //     this.mediaContents[this.currentMediaIndex]['title'];
-    // document.getElementById('media_subtitle').innerHTML =
-    //     this.mediaContents[this.currentMediaIndex]['subtitle'];
-    // document.getElementById('media_desc').innerHTML =
-    //     this.mediaContents[this.currentMediaIndex]['description'];
-
     // Add event handlers to UI components
     document.getElementById('progress_bg').addEventListener(
         'click', this.seekMedia.bind(this));
@@ -873,6 +852,8 @@ CastPlayer.prototype.initializeUI = function () {
         'webkitfullscreenchange', this.fullscreenChangeHandler.bind(this), false);
 
     // Enable play/pause buttons
+    document.getElementById('video_image').addEventListener(
+        'click', this.playerHandler.play.bind(this.playerHandler));
     document.getElementById('play').addEventListener(
         'click', this.playerHandler.play.bind(this.playerHandler));
     document.getElementById('pause').addEventListener(
@@ -887,28 +868,64 @@ CastPlayer.prototype.initializeUI = function () {
 CastPlayer.prototype.addVideoThumbs = function () {
     this.mediaContents = mediaJSON['categories'][0]['videos'];
     var ni = document.getElementById('carousel');
-    // var newdiv = null;
-    // var divIdName = null;
-    // for (var i = 0; i < this.mediaContents.length; i++) {
-    //     newdiv = document.createElement('div');
-    //     divIdName = 'thumb' + i + 'Div';
-    //     newdiv.setAttribute('id', divIdName);
-    //     newdiv.setAttribute('class', 'thumb');
-    //     newdiv.innerHTML =
-    //         '<img src="' + this.mediaContents[i]['thumb'] + '" class="thumbnail">';
-    //     newdiv.addEventListener('click', this.selectMedia.bind(this, i));
-    //     ni.appendChild(newdiv);
-    // }
-    for (var i = 0; i < this.mediaContents.length; i++) {
-        let tileDiv = document.createElement('div');
-        tileDiv.setAttribute('class', 'tile');
-        let mediaDiv = document.createElement('div');
-        mediaDiv.setAttribute('class', 'tile__media');   
-        mediaDiv.innerHTML = `<img src='${this.mediaContents[i]['thumb']}' class="tile__img">`;
-        mediaDiv.addEventListener('click', this.selectMedia.bind(this, i));
-        tileDiv.appendChild(mediaDiv);
-        ni.appendChild(tileDiv);
+    let totalSection = Math.ceil(this.mediaContents.length / 5);
+    let sectionDiv = null;
+    var i = 0;
+    for (i = 0; i < this.mediaContents.length; i++) {
+
+        if (i % 5 == 0) { // First record in each section
+            sectionDiv = document.createElement('section');
+            sectionDiv.setAttribute("id", `videoSection${Math.floor(i/5)+1}`)
+            let aPrevTag = document.createElement('a');
+            let prevSection = Math.floor(i / 5);
+            if (prevSection == 0) prevSection = totalSection;
+            aPrevTag.setAttribute("href", `#videoSection${prevSection}`);
+            aPrevTag.setAttribute("class", "arrow__btn");
+            aPrevTag.innerHTML = "‹"
+            sectionDiv.append(aPrevTag);
+        }
+
+        let itemDiv = document.createElement('div');
+        itemDiv.setAttribute('class', `item`);
+        itemDiv.innerHTML = `<img src='${this.mediaContents[i]['thumb']}'/>`;
+        itemDiv.addEventListener('click', this.selectMedia.bind(this, i));
+        sectionDiv.appendChild(itemDiv);
+
+        if (i % 5 == 4) { // Last record in each section
+            let nextSection = Math.ceil(i / 5) + 1;
+            let aNextTag = document.createElement('a');
+            if (nextSection > totalSection) nextSection = 1;
+            console.log(`Next button : ${nextSection}`);
+            aNextTag.setAttribute("href", `#videoSection${nextSection}`);
+            aNextTag.setAttribute("class", "arrow__btn");
+            aNextTag.innerHTML = "›"
+            sectionDiv.appendChild(aNextTag);
+            ni.appendChild(sectionDiv);
+            sectionDiv = null;
+        }
     }
+    // Handle Last Section
+    if (sectionDiv != null) {
+        // Loop back the previous item
+        let temp = 5 - (i % 5); 
+        for (let x = 0; x < temp; x++) {
+            let dummyDiv = document.createElement('div');
+            dummyDiv.setAttribute('class', `item`);
+            dummyDiv.innerHTML = `<img src='${this.mediaContents[x]['thumb']}'/>`;
+            dummyDiv.addEventListener('click', this.selectMedia.bind(this, x));
+            sectionDiv.appendChild(dummyDiv);
+            console.log(`Adding dummy node ${x}`)
+        }       
+        // Add the Next Tag
+        let aNextTag = document.createElement('a');
+        aNextTag.setAttribute("href", `#videoSection${1}`);
+        aNextTag.setAttribute("class", "arrow__btn");
+        aNextTag.innerHTML = "›"
+        sectionDiv.appendChild(aNextTag);
+        ni.appendChild(sectionDiv);
+    }
+    // console.log(ni.innerHTML);
+
 };
 
 /**

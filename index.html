@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>My Hailey Super 2.0</title>
   <link rel="stylesheet" type="text/css" href="css/netflix.css">
   <link rel="stylesheet" type="text/css" href="css/CastVideos.css">
   <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet'
     type='text/css'>
-    <link rel="icon" href="imagefiles/favicon.ico" type="image/vnd.microsoft.icon">
+  <link rel="icon" href="imagefiles/favicon.ico" type="image/vnd.microsoft.icon">
 </head>
 
 <body>
+
+
   <div id="main_video">
     <div class="imageSub">
       <div class="blackbg" id="playerstatebg">IDLE</div>
-      <div class=label id="playerstate">IDLE</div>
+      <div class=label     id="playerstate">IDLE</div>
       <img src="imagefiles/background.png" id="video_image">
       <div id="video_image_overlay"></div>
       <video id="video_element">
@@ -39,12 +42,7 @@
     </div>
   </div>
 
-  <div class="contain">
-    <div class="row">
-      <div class="row__inner" id="carousel">
-      </div>
-    </div>
-  </div>
+  <div class="wrapper" id="carousel"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="mediaList.js"></script>
