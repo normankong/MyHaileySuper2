@@ -38,7 +38,7 @@ a:hover {
   transition: 450ms transform, 450ms -webkit-transform;
   font-size: 0;
   white-space: nowrap;
-  margin: 70.3125px 0;
+  margin: 0px 0px;
   padding-bottom: 10px;
 }
 .tile {

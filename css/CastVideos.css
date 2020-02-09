@@ -1,6 +1,10 @@
 body {
-  background-color: #F2F2F2;
+  background-color: rgb(0, 0, 0);
   font-family: 'Roboto', "OpenSans", "Verdana", Georgia, Serif;
+  margin: left;
+  width: 90%;
+  border: 3px solid black;
+  padding: 10px;
 }
 
 #msg {
@@ -50,19 +54,21 @@ body {
 }
 
 #video_image {
-  margin-left: 00px;
+  margin: auto;
+  /* margin-left: 00px;
   margin-right: auto;
   margin-top: 00px;
-  margin-bottom: 0px;
+  margin-bottom: 0px; */
   width: 960px;
   height: 536px;
 }
 
 #video_image_overlay {
-  margin-left: 00px;
+  margin: auto;
+  /* margin-left: 00px;
   margin-right: 0px;
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 0px; */
   width: 960px;
   height: 540px;
   background: linear-gradient(to top,
@@ -76,10 +82,11 @@ body {
 
 #video_element {
   display: none;
-  margin-left: 00px;
+  margin: auto;
+  /* margin-left: 00px;
   margin-right: auto;
   margin-top: 00px;
-  margin-bottom: 0px;
+  margin-bottom: 0px; */
   width: 960px;
   height: 540px;
   background-color: #000;
@@ -124,14 +131,18 @@ body {
 }
 
 #media_control {
-  position: absolute;
-  left: 8px;
-  top: 650px;
+  /* position: absolute;
+  left: 10px; */
+  /* top: 650px;
   width: 960px;
   height: 60px;
-  z-index: 1000;
-  margin: -100px 0px 0px 00px;
-  padding: 0px;
+  z-index: 1000; */
+  /* margin-left: auto;
+  margin-right: auto;
+  margin-top: -100px ; */
+  /* padding: 10px; */
+  width: 960px;
+  height: 60px;
   opacity: 0.7;
   background-color: #000;
   font-family: 'Roboto', "Open Sans", "Verdana", Georgia, Serif;
