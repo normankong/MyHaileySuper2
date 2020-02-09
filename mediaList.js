@@ -15,6 +15,11 @@ var mediaJSON = {
                 'thumb': MEDIA_SOURCE_ROOT + '/aladdin/thumb.png',
                 'type': 'video/mp4'
             },{
+                'title': 'Cinderella',
+                'sources': MEDIA_SOURCE_ROOT + 'cinderella/cinderella.mp4',
+                'thumb': MEDIA_SOURCE_ROOT + '/cinderella/cinderella.png',
+                'type': 'video/mp4'
+            },{
                 'title': 'Toy Story 1',
                 'sources': MEDIA_SOURCE_ROOT + 'toyStory1/toyStory1.mp4',
                 'thumb': MEDIA_SOURCE_ROOT + '/toyStory1/toyStory1.jpg',
