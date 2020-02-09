@@ -30,6 +30,9 @@ var DEFAULT_VOLUME = 0.5;
 /** @const {number} Height, in pixels, of volume bar */
 var FULL_VOLUME_HEIGHT = 100;
 
+/** Media source is relative to server location */
+var MEDIA_SOURCE_ROOT = '//' + location.host + location.pathname;
+
 /**
  * Constants of states for media playback
  * @enum {string}
@@ -96,7 +99,6 @@ CastPlayer.prototype.initializeCastPlayer = function () {
     // Set the receiver application ID to your own (created in the
     // Google Cast Developer Console), or optionally
     // use the chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
-    // options.receiverApplicationId = '7232724A';
     options.receiverApplicationId = chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID;
 
     // Auto join policy can be one of the following three:
@@ -288,11 +290,11 @@ CastPlayer.prototype.setupLocalPlayer = function () {
         console.log(`Type    : ${this.mediaContents[mediaIndex]['type']}`);
 
         if (this.mediaContents[mediaIndex]['type'] == "video/mp4") {
-            localPlayer.src = this.mediaContents[mediaIndex]['sources'];
+            localPlayer.src = MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['sources'];
             localPlayer.load();
         } else if (Hls.isSupported()) {
             var hls = new Hls();
-            hls.loadSource(this.mediaContents[mediaIndex]['sources']);
+            hls.loadSource(MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['sources']);
             hls.attachMedia(localPlayer);
             hls.on(Hls.Events.MANIFEST_PARSED, function () {
                 localPlayer.play();
@@ -417,13 +419,14 @@ CastPlayer.prototype.setupRemotePlayer = function () {
 
     playerTarget.load = function (mediaIndex) {
         var mediaInfo = new chrome.cast.media.MediaInfo(
-            this.mediaContents[mediaIndex]['sources'], this.mediaContents[mediaIndex]['type']);
+            MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['sources'],
+            this.mediaContents[mediaIndex]['type']);
 
         mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
         mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
         mediaInfo.metadata.title = this.mediaContents[mediaIndex]['title'];
         mediaInfo.metadata.images = [{
-            'url': this.mediaContents[mediaIndex]['thumb']
+            'url': MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb']
         }];
 
         var request = new chrome.cast.media.LoadRequest(mediaInfo);
@@ -532,7 +535,7 @@ CastPlayer.prototype.selectMedia = function (mediaIndex) {
 
     // Set video image
     var vi = document.getElementById('video_image');
-    vi.src = this.mediaContents[mediaIndex]['thumb'];
+    vi.src = MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb'];
 
     // Reset progress bar
     var pi = document.getElementById('progress_indicator');
@@ -866,66 +869,76 @@ CastPlayer.prototype.initializeUI = function () {
  * Please note that mediaJSON is captured from external file
  */
 CastPlayer.prototype.addVideoThumbs = function () {
-    this.mediaContents = mediaJSON['categories'][0]['videos'];
-    var ni = document.getElementById('carousel');
-    let totalSection = Math.ceil(this.mediaContents.length / 5);
-    let sectionDiv = null;
-    var i = 0;
-    for (i = 0; i < this.mediaContents.length; i++) {
+    var self = this;
+    getJSON("/mediaList.json",
+        function (err, result) {
+            if (err !== null) {
+                alert('Something went wrong: ' + err);
+            } else {
+                // alert('Your query count: ' + result.data);
 
-        if (i % 5 == 0) { // First record in each section
-            sectionDiv = document.createElement('section');
-            sectionDiv.setAttribute("id", `videoSection${Math.floor(i/5)+1}`)
-            let aPrevTag = document.createElement('a');
-            let prevSection = Math.floor(i / 5);
-            if (prevSection == 0) prevSection = totalSection;
-            aPrevTag.setAttribute("href", `#videoSection${prevSection}`);
-            aPrevTag.setAttribute("class", "arrow__btn");
-            aPrevTag.innerHTML = "‹"
-            sectionDiv.append(aPrevTag);
-        }
+                self.mediaContents = result.data;
+                var ni = document.getElementById('carousel');
+                let totalSection = Math.ceil(self.mediaContents.length / 5);
+                let sectionDiv = null;
+                var i = 0;
+                for (i = 0; i < self.mediaContents.length; i++) {
 
-        let itemDiv = document.createElement('div');
-        itemDiv.setAttribute('class', `item`);
-        itemDiv.innerHTML = `<img src='${this.mediaContents[i]['thumb']}'/>`;
-        itemDiv.addEventListener('click', this.selectMedia.bind(this, i));
-        sectionDiv.appendChild(itemDiv);
+                    if (i % 5 == 0) { // First record in each section
+                        sectionDiv = document.createElement('section');
+                        sectionDiv.setAttribute("id", `videoSection${Math.floor(i/5)+1}`)
+                        let aPrevTag = document.createElement('a');
+                        let prevSection = Math.floor(i / 5);
+                        if (prevSection == 0) prevSection = totalSection;
+                        aPrevTag.setAttribute("href", `#videoSection${prevSection}`);
+                        aPrevTag.setAttribute("class", "arrow__btn");
+                        aPrevTag.innerHTML = "‹"
+                        sectionDiv.append(aPrevTag);
+                    }
 
-        if (i % 5 == 4) { // Last record in each section
-            let nextSection = Math.ceil(i / 5) + 1;
-            let aNextTag = document.createElement('a');
-            if (nextSection > totalSection) nextSection = 1;
-            console.log(`Next button : ${nextSection}`);
-            aNextTag.setAttribute("href", `#videoSection${nextSection}`);
-            aNextTag.setAttribute("class", "arrow__btn");
-            aNextTag.innerHTML = "›"
-            sectionDiv.appendChild(aNextTag);
-            ni.appendChild(sectionDiv);
-            sectionDiv = null;
-        }
-    }
-    // Handle Last Section
-    if (sectionDiv != null) {
-        // Loop back the previous item
-        let temp = 5 - (i % 5); 
-        for (let x = 0; x < temp; x++) {
-            let dummyDiv = document.createElement('div');
-            dummyDiv.setAttribute('class', `item`);
-            dummyDiv.innerHTML = `<img src='${this.mediaContents[x]['thumb']}'/>`;
-            dummyDiv.addEventListener('click', this.selectMedia.bind(this, x));
-            sectionDiv.appendChild(dummyDiv);
-            console.log(`Adding dummy node ${x}`)
-        }       
-        // Add the Next Tag
-        let aNextTag = document.createElement('a');
-        aNextTag.setAttribute("href", `#videoSection${1}`);
-        aNextTag.setAttribute("class", "arrow__btn");
-        aNextTag.innerHTML = "›"
-        sectionDiv.appendChild(aNextTag);
-        ni.appendChild(sectionDiv);
-    }
-    // console.log(ni.innerHTML);
+                    let itemDiv = document.createElement('div');
+                    itemDiv.setAttribute('class', `item`);
+                    itemDiv.innerHTML = `<img src='${MEDIA_SOURCE_ROOT}${self.mediaContents[i]['thumb']}'/>`;
+                    itemDiv.addEventListener('click', self.selectMedia.bind(self, i));
+                    sectionDiv.appendChild(itemDiv);
 
+                    if (i % 5 == 4) { // Last record in each section
+                        let nextSection = Math.ceil(i / 5) + 1;
+                        let aNextTag = document.createElement('a');
+                        if (nextSection > totalSection) nextSection = 1;
+                        console.log(`Next button : ${nextSection}`);
+                        aNextTag.setAttribute("href", `#videoSection${nextSection}`);
+                        aNextTag.setAttribute("class", "arrow__btn");
+                        aNextTag.innerHTML = "›"
+                        sectionDiv.appendChild(aNextTag);
+                        ni.appendChild(sectionDiv);
+                        sectionDiv = null;
+                    }
+                }
+                // Handle Last Section
+                if (sectionDiv != null) {
+                    // Loop back the previous item
+                    let temp = 5 - (i % 5);
+                    for (let x = 0; x < temp; x++) {
+                        let dummyDiv = document.createElement('div');
+                        dummyDiv.setAttribute('class', `item`);
+                        dummyDiv.innerHTML = `<img src='${MEDIA_SOURCE_ROOT}${self.mediaContents[x]['thumb']}'/>`;
+                        dummyDiv.addEventListener('click', self.selectMedia.bind(self, x));
+                        sectionDiv.appendChild(dummyDiv);
+                        console.log(`Adding dummy node ${x}`)
+                    }
+                    // Add the Next Tag
+                    let aNextTag = document.createElement('a');
+                    aNextTag.setAttribute("href", `#videoSection${1}`);
+                    aNextTag.setAttribute("class", "arrow__btn");
+                    aNextTag.innerHTML = "›"
+                    sectionDiv.appendChild(aNextTag);
+                    ni.appendChild(sectionDiv);
+                }
+                // console.log(ni.innerHTML);
+            }
+        });
+    return;
 };
 
 /**
@@ -960,4 +973,19 @@ CastPlayer.getErrorMessage = function (error) {
             return 'The operation timed out.' +
                 (error.description ? ' :' + error.description : '');
     }
+};
+
+var getJSON = function (url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function () {
+        var status = xhr.status;
+        if (status === 200) {
+            callback(null, xhr.response);
+        } else {
+            callback(status, xhr.response);
+        }
+    };
+    xhr.send();
 };

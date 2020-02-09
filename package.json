@@ -1,0 +1,28 @@
+{
+  "name": "myhaileysuper2",
+  "version": "1.0.0",
+  "description": "MyHaileySuper2 using Chromecast to stream media to TV",
+  "main": "preprocess.sh",
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node preprocess.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/normankong/MyHaileySuper2.git"
+  },
+  "keywords": [
+    "Chromecast",
+    "MediaStream"
+  ],
+  "author": "Norman K K Kong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/normankong/MyHaileySuper2/issues"
+  },
+  "homepage": "https://github.com/normankong/MyHaileySuper2#readme"
+}

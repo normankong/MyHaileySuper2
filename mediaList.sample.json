@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "title": "Aladdin",
+      "sources": "channel/aladdin/aladdin.mp4",
+      "thumb": "channel/aladdin/aladdin.png",
+      "type": "video/mp4"
+    },
+    {
+      "title": "Cinderella",
+      "sources": "channel/cinderella/cinderella.mp4",
+      "thumb": "channel/cinderella/cinderella.png",
+      "type": "video/mp4"
+    },
+    {
+      "title": "Frozen 1",
+      "sources": "channel/frozen1/frozen1.mp4",
+      "thumb": "channel/frozen1/frozen1.png",
+      "type": "video/mp4"
+    },
+    {
+      "title": "Toy Story 1",
+      "sources": "channel/toyStory1/toyStory1.mp4",
+      "thumb": "channel/toyStory1/toyStory1.png",
+      "type": "video/mp4"
+    },
+    {
+      "title": "Toy Story 2",
+      "sources": "channel/toyStory2/toyStory2.mp4",
+      "thumb": "channel/toyStory2/toyStory2.png",
+      "type": "video/mp4"
+    }
+  ]
+}
