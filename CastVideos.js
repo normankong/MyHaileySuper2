@@ -265,6 +265,16 @@ CastPlayer.prototype.setupLocalPlayer = function () {
     localPlayer.addEventListener(
         'loadeddata', this.onMediaLoadedLocally.bind(this));
 
+    // Add pause handler
+    localPlayer.addEventListener(
+        'click', () => {
+            if (this.playerState !== PLAYER_STATE.PLAYING) {
+                this.playerHandler.play();
+            } else {
+                this.playerHandler.pause();
+            }
+        });
+
     // This object will implement PlayerHandler callbacks with localPlayer
     var playerTarget = {};
 
@@ -623,6 +633,7 @@ CastPlayer.prototype.stopProgressTimer = function () {
  */
 CastPlayer.prototype.incrementMediaTime = function () {
     // First sync with the current player's time
+
     this.currentMediaTime = this.playerHandler.getCurrentMediaTime();
     this.currentMediaDuration = this.playerHandler.getMediaDuration();
 
@@ -653,6 +664,11 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
     var pi = document.getElementById('progress_indicator');
     pi.style.marginLeft = -21 - PROGRESS_BAR_WIDTH + pp + 'px';
 
+    // Update Media Duration
+    let currentMediaTime = this.playerHandler.getCurrentMediaTime();
+    let currentMediaDuration = this.playerHandler.getMediaDuration();
+    this.updateMediaDuration(currentMediaDuration - currentMediaTime);
+
     if (pp >= PROGRESS_BAR_WIDTH) {
         this.endPlayback();
     }
@@ -676,12 +692,16 @@ CastPlayer.prototype.endPlayback = function () {
  * @return {string}
  */
 CastPlayer.getDurationString = function (durationInSec) {
-    var durationString = '' + Math.floor(durationInSec % 60);
-    var durationInMin = Math.floor(durationInSec / 60);
+    var second = Math.floor(durationInSec % 60);
+    second = (second < 10) ? "0" + second : second;
+    var durationString = '' + second;
+        var durationInMin = Math.floor(durationInSec / 60);
     if (durationInMin === 0) {
-        return durationString;
+        return "00:"+durationString;
     }
-    durationString = (durationInMin % 60) + ':' + durationString;
+    var minute = (durationInMin % 60);
+    minute = minute < 10 ? "0" + minute : minute;
+    durationString = minute + ':' + durationString;
     var durationInHour = Math.floor(durationInMin / 60);
     if (durationInHour === 0) {
         return durationString;
@@ -692,9 +712,10 @@ CastPlayer.getDurationString = function (durationInSec) {
 /**
  * Updates media duration text in UI
  */
-CastPlayer.prototype.updateMediaDuration = function () {
+CastPlayer.prototype.updateMediaDuration = function (remainingTime) {
+    var duration = remainingTime == null ? this.currentMediaDuration : remainingTime;
     document.getElementById('duration').innerHTML =
-        CastPlayer.getDurationString(this.currentMediaDuration);
+        CastPlayer.getDurationString(duration);
 };
 
 /**
